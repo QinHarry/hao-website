@@ -1,8 +1,10 @@
-package entity;
+package com.hao.website.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @program: blog
@@ -13,25 +15,18 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "t_content")
-public class Content {
-
-    @Id
-    @GeneratedValue
-    private Integer id;
+public class Content extends BaseEntity{
 
     private String title;
 
-    private String slug;
-
-    private Integer created;
-
-    private Integer modified;
-
     @ManyToOne
     @JoinColumn(name = "authorId")
+    @JsonIgnore
     private User author;
 
     private String type;
+
+    private String language;
 
     private String status;
 
@@ -39,15 +34,17 @@ public class Content {
 
     private String categories;
 
-    private String hits;
+    private int hits;
 
-    private Integer commentsNum;
+    private int commentsNum;
 
-    private Boolean allowComment;
+    private boolean allowComment;
 
-    private Boolean allowPing;
+    private boolean allowPing;
 
-    private Boolean allowFeed;
+    private boolean allowFeed;
 
     private String content;
+
+    private String img;
 }

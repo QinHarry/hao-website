@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<ol class="page-navigator" th:fragment="pageNav(pageInfo, prevText, nextText, prefix)">
+    <th:block th:if="${pageInfo.hasPrevious()}">
+        <li class="prev"><a th:href="@{'/'+${prefix}+'/'+${pageInfo.previousPageable.getPageNumber()}}" th:text="${prevText}"></a></li>
+    </th:block>
+
+
+    <th:block th:each="navIndex :${ pageInfo.getPageable().getPageNumber()}">
+        <li th:class="current"><a th:href="@{'/page/'+${navIndex}}" th:text="${navIndex}"></a></li>
+    </th:block>
+
+
+    <th:block th:if="${pageInfo.hasNext()}">
+        <li class="next"><a th:href="@{'/'+${prefix}+'/'+${pageInfo.nextPageable.getPageNumber()}}" th:text="${nextText}"></a></li>
+    </th:block>
+
+</ol>
+
+<div th:fragment="pageAdminNav(pageInfo)" class="text-center">
+    <ul class="pagination m-b-5 center-block" style="display: inline-block;float: none;">
+        <li th:if="${pageInfo.hasPrevious()}">
+            <a th:href="@{'?page='+${pageInfo.previousPageable().getPageNumber()}}" aria-label="Previous">
+                <i class="fa fa-angle-left"></i>&nbsp;Last Page
+            </a>
+        </li>
+
+        <th:block th:each="nav : ${pageInfo.getPageable().getPageNumber() + 1}">
+            <li th:class="active"><a th:href="@{'?page='+${nav}}" th:text="${nav}"></a>
+            </li>
+        </th:block>
+
+        <th:block th:if="${pageInfo.hasNext()}">
+            <li>
+                <a th:href="@{'?page='+${pageInfo.nextPageable().getPageNumber()}}" aria-label="Next">
+                    Next Page&nbsp;<i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </th:block>
+
+        <li><span th:text="'Total '+${pageInfo.getTotalPages()}"></span></li>
+    </ul>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="comment">
+<body>
+<div th:if="${article}!=null">
+    <div th:id="${article.id ?: 0}" class="comment-container">
+        <div id="comments" class="clearfix">
+            <div th:if="${article.allowComment}">
+                <span class="response">
+                <th:block th:if="${session.login_user}">
+                    Hi，<a th:href="${session.login_user.homeUrl}" data-no-instant=""
+                          th:text="${session.login_user.username}"></a>
+                    If you would like to <a href="/logout" title="注销" data-no-instant="">logout</a> ?
+                </th:block>
+            </span>
+                <form method="post" id="comment-form" class="comment-form" role="form"
+                      onsubmit="return TaleComment.subComment();">
+                    <input type="hidden" name="coid" id="coid"/>
+                    <input type="hidden" name="cid" id="cid" th:value="${article.id}"/>
+                    <input type="hidden" name="_csrf_token" th:value="${_csrf_token}"/>
+                    <input type="text" name="author" maxlength="12" id="author"
+                           class="form-control input-control clearfix"
+                    />
+                    <input type="email" name="mail" id="mail" class="form-control input-control clearfix"
+                    />
+                    <input type="url" name="url" id="url" class="form-control input-control clearfix"
+                    />
+                    <textarea name="text" id="textarea" class="form-control" placeholder="Comment cannot be empty"
+                              required="required" minlength="5"
+                              maxlength="2000"></textarea>
+                    <button type="submit" class="submit" id="misubmit">Submit</button>
+                </form>
+            </div>
+            <div th:unless="${article.allowComment}">
+                <span class="response">Comment is closed</span>
+            </div>
+
+            <div th:if="${comments}">
+                <ol class="comment-list">
+                    <th:block th:each="comment :${comments.getContent()}">
+                        <li th:id="'li-comment-'+${comment.id}" class="comment-body comment-parent comment-odd">
+                            <div th:id="'comment-'+${comment.id}">
+                                <div class="comment-view" onclick="">
+                                    <div class="comment-header">
+                                        <img class="avatar"
+                                             th:src="@{${common.gravatar(comment.mail)}(s='80',r='G',d='')}"
+                                             th:title="${comment.author}"
+                                             width="80" height="80"/>
+                                        <span class="comment-author">
+                                <a href="##" rel="external nofollow"
+                                   th:text="${comment.author}"></a>
+                            </span>
+                                    </div>
+                                    <div class="comment-content">
+                                        <span class="comment-author-at"></span>
+                                        <p th:utext="${common.article(comment.content)}"></p>
+                                    </div>
+                                    <div class="comment-meta">
+                                        <time class="comment-time" th:text="${common.fmtdate(comment.created)}"></time>
+                                        <span class="comment-reply">
+                            </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </th:block>
+                </ol>
+                <div class="lists-navigator clearfix">
+                    <ol class="page-navigator">
+                        <th:block th:if="${comments.hasPrevious()}">
+                            <li class="prev"><a th:href="'?cp='+${comments.previousPageable.getPageNumber()}+'#comments'">←</a></li>
+                        </th:block>
+                        <th:block th:each="navIndex : ${comments.getPageable().getPageNumber()}">
+                            <li th:class="current"><a
+                                    th:href="'?cp='+${navIndex}+'#comments'" th:text="${navIndex}"></a>
+                            </li>
+                        </th:block>
+                        <th:block th:if="${comments.hasNext()}">
+                            <li class="next"><a th:href="'?cp='+${comments.nextPageable.getPageNumber()}+'#comments'">→</a></li>
+                        </th:block>
+                    </ol>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function () {
+        window.TaleComment = {
+            dom: function (id) {
+                return document.getElementById(id);
+            },
+            create: function (tag, attr) {
+                var el = document.createElement(tag);
+                for (var key in attr) {
+                    el.setAttribute(key, attr[key]);
+                }
+                return el;
+            },
+            reply: function (coid) {
+                $('#comment-form input[name=coid]').val(coid);
+                $('html, body').animate({scrollTop: $('div.comment-container').offset().top()}, 500);
+                $('#comment-form #textarea').focus();
+            },
+            subComment: function () {
+                $.ajax({
+                    type: 'post',
+                    url: 'comment',
+                    data: $('#comment-form').serialize(),
+                    async: false,
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#comment-form input[name=coid]').val('');
+                        if (result && result.success) {
+                            alert('Comment submitted successfully');
+                            window.location.reload();
+                        } else {
+                            if (result.msg) {
+                                alert(result.msg);
+                            }
+                        }
+                    }
+                });
+                return false;
+            }
+        };
+    })();
+    
+    function getCommentCookie(name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)) {
+            return unescape(decodeURI(arr[2]));
+        } else {
+            return null;
+        }
+    }
+
+    function addCommentInputValue() {
+        document.getElementById('author').value = getCommentCookie('tale_remember_author');
+        document.getElementById('mail').value = getCommentCookie('tale_remember_mail');
+        document.getElementById('url').value = getCommentCookie('tale_remember_url');
+    }
+
+    addCommentInputValue();
+</script>
+</body>
+</html>

@@ -1,6 +1,11 @@
 package com.hao.website.blog.service;
 
-import com.hao.website.blog.model.Vo.ContentVo;
+import com.hao.website.blog.entity.Content;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @program: blog
@@ -10,7 +15,16 @@ import com.hao.website.blog.model.Vo.ContentVo;
  **/
 public interface IContentService {
 
-    String publish(ContentVo contents);
+    String publish(Content contents);
 
+    Page<Content> getContents(Integer page, Integer pageSize);
 
+    Optional<Content> getContent(int id);
+
+    void save(Content content);
+
+    String deleteById(int id);
+
+    Page<Content> getSortedContents(Integer page, Integer pageSize,
+                                    Sort.Direction direction, String status, String type);
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:yh="http://www.thymeleaf.org">
+<div th:replace="themes/default/header::header(${article.title},${article.tags})"></div>
+<body>
+<article class="main-content post-page" itemscope="" itemtype="http://schema.org/Article">
+    <div class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+            <a th:href="${common.permalink(article)}" th:text="${article.title}" data-no-instant=""></a>
+        </h1>
+        <div class="post-data">
+            <time th:datetime="${common.fmtdate(article.created)}" itemprop="datePublished" th:text="'Post at '+ ${common.fmtdate(article.created)}"></time>
+            / <th:block th:utext="${common.showCategories(article.categories)}"/> / <a href="#comments" th:text="${article.commentsNum ?: 0}+' comments'"></a> /
+            <th:block th:text="${article.hits}"/>view
+        </div>
+    </div>
+    <div id="post-content" class="post-content" itemprop="articleBody">
+        <p class="post-tags" th:utext="${common.showTags(article.tags)}"></p>
+        <th:block th:utext="${common.article(article.content)}"/>
+        <p class="post-info">
+            Copyright<br/>Last edited:
+            <th:block th:text="${common.fmtdate(article.modified, 'yyyy/MM/dd HH:mm')}"/>
+        </p>
+    </div>
+</article>
+<div th:replace="themes/default/comment::comment"></div>
+<div th:replace="themes/default/footer::footer"></div>
+</body>
+</html>

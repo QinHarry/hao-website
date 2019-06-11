@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="aside">
+<body>
+<aside class="col-lg-4">
+    <!-- Widget [Search Bar Widget]-->
+    <div class="widget search">
+        <header>
+            <h3 class="h6">Search the blog</h3>
+        </header>
+        <form action="#" class="search-form">
+            <div class="form-group">
+                <input type="search" placeholder="What are you looking for?">
+                <button type="button" class="submit" onclick="beContinued();"><i class="icon-search"></i></button>
+            </div>
+        </form>
+    </div>
+    <!-- Widget [Categories Widget]-->
+    <div class="widget categories">
+        <header>
+            <h3 class="h6">Categories</h3>
+        </header>
+        <th:block th:each="category : ${categories}">
+            <div class="item d-flex justify-content-between"><a href="#" th:text="${category.name}"></a><span th:text="${category.count}"></span></div>
+        </th:block>
+    </div>
+    <!-- Widget [Tags Cloud Widget]-->
+    <div class="widget tags">
+        <header>
+            <h3 class="h6">Tags</h3>
+        </header>
+        <ul class="list-inline">
+            <th:block th:each="tag : ${tags}">
+                <li class="list-inline-item"><a href="#" class="tag" th:text="${tag.name}"></a></li>
+            </th:block>
+        </ul>
+    </div>
+</aside>
+</body>
+</html>

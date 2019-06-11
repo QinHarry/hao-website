@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="themes/distribution/header::header(null,null)"></div>
+<body>
+<div class="container">
+    <div class="row">
+        <!-- Latest Posts -->
+        <main class="post blog-post col-lg-8">
+            <div class="container">
+                <div class="post-single">
+                    <div class="post-thumbnail"><img th:src="${article.img}" alt="..." class="img-fluid"></div>
+                    <div class="post-details">
+                        <div class="post-meta d-flex justify-content-between">
+                            <div class="category" th:text="${article.categories}"><a href="#"></a></div>
+                        </div>
+                        <h1 th:text="${article.title}"><a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
+                        <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#" class="author d-flex align-items-center flex-wrap">
+                            <div class="avatar"><img th:src="@{/distribution/img/avatar-1.jpg}" alt="..." class="img-fluid"></div>
+                            <div class="title"><span><th:block th:text="${article.author.screenName}"/></span></div></a>
+                            <div class="d-flex align-items-center flex-wrap">
+                                <div class="date"><i class="icon-clock"></i><th:block th:text="${common.fmtdate(article.created, 'yyyy-MM-dd')}"/></div>
+                                <div class="views" th:text="${article.hits}"><i class="icon-eye"></i></div>
+                                <div class="comments meta-last"><i class="icon-comment"></i><th:block th:text="${article.commentsNum}"/></div>
+                            </div>
+                        </div>
+                        <th:block th:utext="${common.article(article.content)}"/>
+                        <div class="post-tags">
+                            <th:block th:each="c : ${tags}">
+                                <a href="#" class="tag" th:text="${c.name}"></a>
+                            </th:block>
+                        </div>
+                        <div class="post-comments">
+                            <header>
+                                <h3 class="h6">Post Comments<span class="no-of-comments" th:text="'('+${comments.size()}+')'"></span></h3>
+                            </header>
+                            <th:block th:each="c : ${comments}">
+                                <div class="comment">
+                                    <div class="comment-header d-flex justify-content-between">
+                                        <div class="user d-flex align-items-center">
+                                            <div class="avatar"><img th:src="@{/distribution/img/user.svg}" alt="..." class="img-fluid rounded-circle"></div>
+                                            <div class="title">
+                                                <strong th:text="${c.author}"></strong>
+                                                <span class="date"><th:block th:text="${common.fmtdate(c.created, 'yyyy-MM-dd HH:mm:ss')}"/></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="comment-body">
+                                        <p><th:block th:text="${c.comment}"/></p>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+                        <div class="add-comment">
+                            <header>
+                                <h3 class="h6">Leave a reply</h3>
+                            </header>
+                            <form method="post" onsubmit="return subComment();" role="form" class="commenting-form" id="comment-form">
+                                <div class="row">
+                                    <input type="hidden" name="coid" id="coid"/>
+                                    <input type="hidden" name="cid" id="cid" th:value="${article.id}"/>
+                                    <input type="hidden" name="_csrf_token" th:value="${_csrf_token}"/>
+                                    <div class="form-group col-md-6">
+                                        <input type="text" name="author" id="author" placeholder="Name" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <input type="email" name="email" id="email" placeholder="Email Address (will not be published)" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <textarea name="text" id="comment" placeholder="Type your comment" class="form-control"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <button type="submit" class="btn btn-secondary" >Submit Comment</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div th:replace="themes/distribution/aside::aside"></div>
+    </div>
+</div>
+</body>
+<div th:replace="themes/distribution/footer::footer"></div>
+<script type="text/javascript">
+    function subComment() {
+        $.ajax({
+            type: 'post',
+            url: '/comment',
+            data: $("#comment-form").serialize(),
+            async: false,
+            dataType: 'json',
+            success: function (result) {
+                $('#comment-form input[name=coid]').val('');
+                if (result && result.success) {
+                    // alert("Comment successfully!");
+                    // window.location.reload();
+                    tale.alertOkAndReload("Comment successfully!")
+                } else {
+                    if (result.msg) {
+                        alert(result.msg);
+                    }
+                }
+            }
+        });
+        return false;
+    }
+</script>
+</html>
