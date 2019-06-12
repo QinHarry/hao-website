@@ -67,10 +67,30 @@
                     </li>
                 </ul>
                 <div class="navbar-text"><a href="#" class="search-btn"><i class="icon-search-1"></i></a></div>
-                <ul class="langs navbar-text"><a href="#" class="active">EN</a><span>        </span><a href="#">中文</a></ul>
+                <ul class="langs navbar-text" id="lan">
+                    <th:block th:if="${lan == 'EN'}"><a href="" class="active" onclick="changeLan('CN')">中文</a></th:block>
+                    <th:block th:if="${lan == 'CN'}"><a href="" class="active" onclick="changeLan('EN')">EN</a></th:block>
+                </ul>
             </div>
         </div>
     </nav>
 </header>
 </body>
+<script type="text/javascript">
+    console.log($("#lan").text());
+    function changeLan(lan) {
+        $.ajax({
+            type: 'post',
+            url: '/lan',
+            data: {lan: lan},
+            async: false,
+            dataType: 'json',
+            success: function (result) {
+                if (result && result.success) {
+                    $("#lan").text(lan);
+                }
+            }
+        });
+    }
+</script>
 </html>

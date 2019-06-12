@@ -1,6 +1,7 @@
 package com.hao.website.blog.interceptor;
 
 import com.hao.website.blog.constant.WebConstant;
+import com.hao.website.blog.controller.BaseController;
 import com.hao.website.blog.dto.Types;
 import com.hao.website.blog.entity.Option;
 import com.hao.website.blog.entity.User;
@@ -93,6 +94,7 @@ public class BaseInterceptor implements HandlerInterceptor {
         request.setAttribute("common", viewUtil);
         request.setAttribute("option", option);
         request.setAttribute("adminCommon", adminCommon);
+        request.setAttribute("lan", BaseController.LANGUAGE);
     }
 
     @Override

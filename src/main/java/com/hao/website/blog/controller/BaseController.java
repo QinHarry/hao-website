@@ -17,6 +17,8 @@ public class BaseController {
 
     public static String THEME = "themes/distribution";
 
+    public static String LANGUAGE = "EN";
+
     protected MapCache cache = MapCache.single();
 
     public String render(String viewName) {

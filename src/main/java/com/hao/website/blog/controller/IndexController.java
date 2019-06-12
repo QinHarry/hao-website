@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -139,33 +140,26 @@ public class IndexController extends BaseController {
                                 @RequestParam String author, @RequestParam String email,
                                 @RequestParam String text, @RequestParam String _csrf_token) {
         String ref = request.getHeader("Referer");
-        System.out.println("hqin @@@@@@@@@@@@@@@@@@@@0 " + author);
         if (StringUtils.isBlank(ref) || StringUtils.isBlank(_csrf_token)) {
             return RestResponse.fail(ErrorCode.BAD_REQUEST);
         }
-        System.out.println("hqin @@@@@@@@@@@@@@@@@@@@ " + author);
         String token = cache.hget(Types.CSRF_TOKEN.getType(), _csrf_token);
         if (StringUtils.isBlank(token)) {
             return RestResponse.fail(ErrorCode.BAD_REQUEST);
         }
-        System.out.println("hqin @@@@@@@@@@@@@@@@@@@@2 " + author);
         if (null == cid || StringUtils.isBlank(text)) {
             return RestResponse.fail("Comment is missing");
         }
-        System.out.println("hqin @@@@@@@@@@@@@@@@@@@3 " + author);
         Optional<Content> content = contentService.getContent(cid);
         if (!content.isPresent()) {
             return RestResponse.fail("Content is missing");
         }
-        System.out.println("hqin @@@@@@@@@@@@@@@@@@@@5 " + author);
         if (StringUtils.isNotBlank(author) && author.length() > 50) {
             return RestResponse.fail("Author name is too long");
         }
-        System.out.println("hqin @@@@@@@@@@@@@@@@@@@@6 " + author);
         if (StringUtils.isNotBlank(email) && !TaleUtils.isEmail(email)) {
             return RestResponse.fail("The email format is incorrect");
         }
-        System.out.println("hqin @@@@@@@@@@@@@@@@@@@@7 " + author);
         if (text.length() > 200) {
             return RestResponse.fail("The comment is too long, less than 200");
         }
@@ -175,7 +169,6 @@ public class IndexController extends BaseController {
         if (null != count && count > 0) {
             return RestResponse.fail("Comment is too fast, please wait a few seconds");
         }
-        System.out.println("hqin @@@@@@@@@@@@@@@@@@@@8 " + author);
 
         author = TaleUtils.cleanXSS(author);
         text = TaleUtils.cleanXSS(text);
@@ -191,7 +184,6 @@ public class IndexController extends BaseController {
         comment.setEmail(email);
         comment.setParent(coid);
         comment.setStatus("not_audit");
-        System.out.println("hqin ########################## " + comment);
         try {
             commentService.save(comment);
             cookie("tale_remember_author", URLEncoder.encode(author, "UTF-8"), 7 * 24 * 60 * 60, response);
@@ -204,6 +196,13 @@ public class IndexController extends BaseController {
             logger.error(msg, e);
             return RestResponse.fail(msg);
         }
+    }
+
+    @RequestMapping(value = "lan")
+    @ResponseBody
+    public RestResponse changeLAN(HttpServletRequest request, @RequestParam String lan) {
+        BaseController.LANGUAGE = lan;
+        return RestResponse.ok();
     }
 
     /** fetch comments for the given post
