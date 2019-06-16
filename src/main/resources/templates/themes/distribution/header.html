@@ -50,7 +50,7 @@
         <div class="container">
             <!-- Navbar Brand -->
             <div class="navbar-header d-flex align-items-center justify-content-between">
-                <!-- Navbar Brand --><a th:href="${common.siteUrl('/home')}" class="navbar-brand">Bootstrap Blog</a>
+                <!-- Navbar Brand --><a th:href="${common.siteUrl('/home')}" class="navbar-brand">Tale Blog</a>
                 <!-- Toggle Button-->
                 <button type="button" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span></span><span></span><span></span></button>
             </div>
@@ -61,7 +61,17 @@
                     </li>
                     <li class="nav-item"><a th:href="${common.siteUrl('/blog')}" class="nav-link ">Blog</a>
                     </li>
-                    <li class="nav-item"><a th:href="${common.siteUrl('/post')}" class="nav-link ">Post</a>
+                    <li class="nav-item">
+                        <div class="dropdown" style="position: relative; top: 50%; transform: translateY(-50%);">
+                            <a class="btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" href="#">Infos <b class="caret"></b></a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a href="#">Jobs</a></li>
+                                <li><a href="#">E-Commerce</a></li>
+                                <li><a href="#">Others1</a></li>
+    <!--                            <li class="divider"></li>-->
+                                <li><a href="#">Others2</a></li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item"><a th:href="${common.siteUrl('/about')}" class="nav-link ">About</a>
                     </li>

@@ -147,6 +147,8 @@ public class ContentServiceImpl implements IContentService {
                 list.add(cb.equal(root.get("status").as(String.class), status));
             }
 
+            list.add(cb.equal(root.get("language").as(String.class), BaseController.LANGUAGE));
+
             return cb.and(list.toArray(new Predicate[list.size()]));
         };
 
