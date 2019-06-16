@@ -22,8 +22,9 @@ CREATE TABLE `t_content` (
   `allow_comment` tinyint(1) DEFAULT '1',
   `allow_ping` tinyint(1) DEFAULT '1',
   `allow_feed` tinyint(1) DEFAULT '1',
+  `language` varchar(3) default 'EN',
   `img` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `t_user`;
@@ -90,6 +91,7 @@ CREATE TABLE `t_comment` (
   `status` varchar(16) DEFAULT 'approved',
   `parent` int(10) unsigned DEFAULT '0',
   `comment` text,
+  `email` varchar(32) default null,
   PRIMARY KEY (`id`),
   KEY `cid` (`content_id`),
   KEY `created` (`created`)
