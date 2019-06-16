@@ -5,8 +5,16 @@ import com.hao.website.blog.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -86,14 +94,14 @@ public class TaleUtils {
         SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
         byte[] encryptedBytes = cipher.doFinal(data.getBytes());
-        return new BASE64Encoder().encode(encryptedBytes);
+        return Base64.getEncoder().encodeToString(encryptedBytes);
     }
 
     public static String deAes(String data, String key) throws Exception {
         Cipher cipher = Cipher.getInstance("AES");
         SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
         cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
-        byte[] cipherTextBytes = new BASE64Decoder().decodeBuffer(data);
+        byte[] cipherTextBytes = Base64.getDecoder().decode(data);
         byte[] decValue = cipher.doFinal(cipherTextBytes);
         return new String(decValue);
     }

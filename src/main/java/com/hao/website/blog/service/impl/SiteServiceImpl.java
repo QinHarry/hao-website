@@ -30,7 +30,15 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,44 +99,83 @@ public class SiteServiceImpl implements ISiteService {
     }
 
     @Override
-    public BackResponse backup(String bk_type, String bk_path, String fmt) throws Exception {
-        BackResponse backResponse = new BackResponse();
-        if (bk_type.equals("attach")) {
-            if (StringUtils.isBlank(bk_path)) {
-                throw new TipException("Please input the back path");
-            }
-            if (!new File(bk_path).isDirectory()) {
-                throw new TipException("The folder is not exist");
-            }
-            String bkAttachDir = AttachController.CLASSPATH + "upload";
-            String bkThemesDir = AttachController.CLASSPATH + "templates/themes";
-
-            String fname = DateKit.dateFormat(new Date(), fmt) + "_" + TaleUtils.getRandomNumber(5) + ".zip";
-
-            String attachPath = bk_path + "/" + "attachs_" + fname;
-            String themesPath = bk_path + "/" + "themes_" + fname;
-
-            ZipUtils.zipFolder(bkAttachDir, attachPath);
-            ZipUtils.zipFolder(bkThemesDir, themesPath);
-
-            backResponse.setAttachPath(attachPath);
-            backResponse.setThemePath(themesPath);
-        } else if (bk_type.equals("db")) {
-            String bkAttachDir = AttachController.CLASSPATH + "upload/";
-            if (!(new File(bkAttachDir)).isDirectory()) {
-                File file = new File(bkAttachDir);
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-            }
-
-            String sqlFileName = "tale_" + DateKit.dateFormat(new Date(), fmt) + "_"
-                    + TaleUtils.getRandomNumber(5) + ".sql";
-            String zipFile = sqlFileName.replace(".sql", ".zip");
-
-
+    public boolean fileBackup(final String path) {
+        String filename = "tale_" + DateKit.dateFormat(new Date(), "yyyyMMddHHmm") + ".tar.gz";
+        String savePath;
+        if (!path.endsWith(File.separator)) {
+            savePath = path + File.separator;
+        } else {
+            savePath = path;
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append("tar -zcvf ").append(savePath + filename).append(" ");
+        sb.append(AttachController.CLASSPATH + "upload/");
+        return baseBackup(savePath, filename, sb.toString());
+    }
 
-        return backResponse;
+    @Override
+    public boolean databaseBackup(final String path) {
+        String sqlFileName = "tale_" + DateKit.dateFormat(
+                new Date(), "yyyyMMddHHmm") + "_" + TaleUtils.getRandomNumber(5) + ".sql";
+        String savePath;
+        if (!path.endsWith(File.separator)) {
+            savePath = path + File.separator;
+        } else {
+            savePath = path;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("mysqldump").append(" --opt").append(" -h").append(" localhost");
+        stringBuilder.append(" --user=").append("hao").append(" --password=").append("1122");
+        stringBuilder.append(" --lock-all-tables=true");
+        stringBuilder.append(" --result-file=").append(savePath + sqlFileName);
+        stringBuilder.append(" --default-character-set=utf8 ").append("tale");
+
+        return baseBackup(savePath, sqlFileName, stringBuilder.toString());
+    }
+
+    private synchronized boolean baseBackup(final String path, final String name, final String command) {
+        boolean res = false;
+
+        PrintWriter printWriter = null;
+        BufferedReader bufferedReader = null;
+
+        File saveFile = new File(path);
+        if (!saveFile.exists()) {
+            saveFile.mkdirs();
+        }
+        try {
+            printWriter = new PrintWriter(new OutputStreamWriter(
+                    new FileOutputStream(path + name), StandardCharsets.UTF_8));
+            Process process = Runtime.getRuntime().exec(command);
+            InputStreamReader inputStreamReader = new InputStreamReader(process.getInputStream(),
+                    StandardCharsets.UTF_8);
+            bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                printWriter.println(line);
+            }
+            printWriter.flush();
+            if (process.waitFor() == 0) {
+                res = true;
+            }
+        } catch (FileNotFoundException e) {
+            logger.info("backup file not found ", e);
+        } catch (InterruptedException ee) {
+            logger.info("backup interrupted ", ee);
+        } catch (IOException eee) {
+            logger.info("Failed to write ", eee);
+        } finally {
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+                if (printWriter != null) {
+                    printWriter.close();
+                }
+            } catch (IOException e) {
+                logger.info("Failed to close backup", e);
+            }
+        }
+        return res;
     }
 }

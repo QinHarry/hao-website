@@ -74,9 +74,31 @@ public class SettingController extends BaseController {
         }
     }
 
+
+    @PostMapping(value = "/backup")
+    @ResponseBody
     public RestResponse backup(@RequestParam String bk_type, @RequestParam String bk_path, HttpServletRequest request) {
         if (StringUtils.isBlank(bk_type)) {
             return RestResponse.fail("Please input backup type");
+        }
+        String savePath;
+        if (StringUtils.isBlank(bk_path)) {
+            savePath = System.getProperty("user.home") + "/backup/";
+        } else {
+            savePath = bk_path;
+        }
+
+        boolean res = false;
+        switch (bk_type) {
+            case "database":
+                res = siteService.databaseBackup(savePath);
+                break;
+            case "file":
+                res = siteService.fileBackup(savePath);
+                break;
+        }
+        if (!res) {
+            return RestResponse.fail("Failed to backup " + bk_type);
         }
 
         return RestResponse.ok();

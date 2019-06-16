@@ -117,8 +117,8 @@
                                         <input id="backup_dir" style="width: 100%;" class="form-control" placeholder="Please input the path to store the backup" required="" aria-required="true" type="text"/>
                                     </div>
 
-                                    <button type="button" class="btn btn-success waves-effect waves-light m-l-10" onclick="backup('attach');">Backup File</button>
-                                    <button type="button" class="btn btn-danger waves-effect waves-light m-l-10" onclick="backup('db')">Export Database SQL</button>
+                                    <button type="button" class="btn btn-success waves-effect waves-light m-l-10" onclick="backup('file');">Backup File</button>
+                                    <button type="button" class="btn btn-danger waves-effect waves-light m-l-10" onclick="backup('database')">Export Database SQL</button>
                                 </form>
                             </div>
                         </div>
@@ -197,14 +197,7 @@
             data: param,
             success: function (result) {
                 if(result && result.success){
-                    if(result.payload && result.payload.attach_path){
-                        swal('备份成功', '您的附件备份在 <mark>'+ result.payload.attach_path +'</mark><br/><br/>' +
-                            '主题备份存储在 <mark>'+ result.payload.theme_path +'</mark>', 'success');
-                        $('#backup_dir').val('');
-                    }
-                    if(result.payload.sql_path){
-                        window.location.href = '/upload/' + result.payload.sql_path;
-                    }
+                    tale.alertOk("Backup Success!")
                 } else {
                     tale.alertError(result.msg || '备份失败');
                 }

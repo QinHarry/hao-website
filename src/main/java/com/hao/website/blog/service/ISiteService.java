@@ -18,5 +18,7 @@ public interface ISiteService {
 
     Statistics getStatistics();
 
-    BackResponse backup(String bk_type, String bk_path, String fmt) throws Exception;
+    boolean databaseBackup(String dir);
+
+    boolean fileBackup(String dir);
 }

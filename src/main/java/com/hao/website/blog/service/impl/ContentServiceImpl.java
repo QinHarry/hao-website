@@ -1,12 +1,14 @@
 package com.hao.website.blog.service.impl;
 
 import com.hao.website.blog.constant.WebConstant;
+import com.hao.website.blog.controller.BaseController;
 import com.hao.website.blog.dao.ContentJPA;
 import com.hao.website.blog.dto.Types;
 import com.hao.website.blog.entity.Content;
 import com.hao.website.blog.entity.Meta;
 import com.hao.website.blog.service.IContentService;
 import com.hao.website.blog.service.IMetaService;
+import com.hao.website.blog.utils.DateKit;
 import com.hao.website.blog.utils.TaleUtils;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +27,17 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -75,6 +87,7 @@ public class ContentServiceImpl implements IContentService {
             }
         }
 
+        content.setLanguage(BaseController.LANGUAGE);
         content.setContent(EmojiParser.parseToAliases(content.getContent()));
         contentJPA.save(content);
 
