@@ -65,6 +65,7 @@ public class TaleUtilsTest {
     public void MD5encode() {
         String password = "hao1122";
         String encoded = TaleUtils.MD5encode(password);
+        System.out.println(encoded);
     }
 
     @Test
