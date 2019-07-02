@@ -13,8 +13,7 @@ import com.hao.website.blog.utils.IPKit;
 import com.hao.website.blog.utils.MapCache;
 import com.hao.website.blog.utils.TaleUtils;
 import com.hao.website.blog.utils.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -26,9 +25,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Component
 public class BaseInterceptor implements HandlerInterceptor {
-    private static final Logger logger = LoggerFactory.getLogger(BaseInterceptor.class);
     private static final String USER_AGENT = "user-agent";
     private static List<String> staticUrls = Arrays.asList("/js/", "/css/", "/images/", "/plugins/", "/fonts/",
             "/icons-reference/", "/img/", "/vendor/");
@@ -52,8 +51,8 @@ public class BaseInterceptor implements HandlerInterceptor {
         String contextPath = request.getContextPath();
         String uri = request.getRequestURI();
 
-        logger.info("UserAgent: {}", request.getHeader(USER_AGENT));
-        logger.info("Request to: {}, request from {}", uri, IPKit.getIpAddrByRequest(request));
+        log.info("UserAgent: {}", request.getHeader(USER_AGENT));
+        log.info("Request to: {}, request from {}", uri, IPKit.getIpAddrByRequest(request));
 
         User user = TaleUtils.getLoginUser(request);
         if (null == user) {

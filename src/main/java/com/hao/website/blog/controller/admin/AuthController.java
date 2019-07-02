@@ -9,9 +9,8 @@ import com.hao.website.blog.exception.TipException;
 import com.hao.website.blog.service.ILogService;
 import com.hao.website.blog.service.IUserService;
 import com.hao.website.blog.utils.TaleUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,11 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 @Transactional(rollbackFor = TipException.class)
 public class AuthController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private IUserService userService;
@@ -69,7 +68,7 @@ public class AuthController extends BaseController {
             if (e instanceof TipException) {
                 msg = e.getMessage();
             } else {
-                logger.error(msg, e);
+                log.error(msg, e);
             }
             return RestResponse.fail(msg);
         }
@@ -88,7 +87,7 @@ public class AuthController extends BaseController {
             response.sendRedirect("/admin/login");
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("Fail to logout", e);
+            log.error("Fail to logout", e);
         }
     }
 }

@@ -13,9 +13,8 @@ import com.hao.website.blog.service.IMetaService;
 import com.hao.website.blog.utils.IPKit;
 import com.hao.website.blog.utils.TaleUtils;
 import com.vdurmont.emoji.EmojiParser;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -43,9 +42,9 @@ import java.util.Optional;
  * @author: Hao Qin
  * @create: 11:32 12/02/2018
  **/
+@Slf4j
 @Controller
 public class IndexController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     private static final int PAGESIZE = 3;
     private static final int TAGSIZE = 10;
@@ -193,7 +192,7 @@ public class IndexController extends BaseController {
             return RestResponse.ok();
         } catch (Exception e) {
             String msg = "Fail to comment";
-            logger.error(msg, e);
+            log.error(msg, e);
             return RestResponse.fail(msg);
         }
     }

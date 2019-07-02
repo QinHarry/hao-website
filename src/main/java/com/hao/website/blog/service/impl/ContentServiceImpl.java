@@ -8,12 +8,10 @@ import com.hao.website.blog.entity.Content;
 import com.hao.website.blog.entity.Meta;
 import com.hao.website.blog.service.IContentService;
 import com.hao.website.blog.service.IMetaService;
-import com.hao.website.blog.utils.DateKit;
 import com.hao.website.blog.utils.TaleUtils;
 import com.vdurmont.emoji.EmojiParser;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,27 +25,16 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 
+@Slf4j
 @Service
 public class ContentServiceImpl implements IContentService {
-
-    Logger logger = LoggerFactory.getLogger(ContentServiceImpl.class);
 
     @Autowired
     private ContentJPA contentJPA;

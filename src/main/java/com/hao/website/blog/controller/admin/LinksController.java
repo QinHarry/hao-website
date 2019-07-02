@@ -5,8 +5,7 @@ import com.hao.website.blog.dto.RestResponse;
 import com.hao.website.blog.dto.Types;
 import com.hao.website.blog.entity.Meta;
 import com.hao.website.blog.service.IMetaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/links")
 public class LinksController extends BaseController {
-
-    private static final Logger logger = LoggerFactory.getLogger(LinksController.class);
 
     @Autowired
     private IMetaService metaService;
@@ -50,7 +48,7 @@ public class LinksController extends BaseController {
             metaService.saveMeta(meta);
         } catch (Exception e) {
             String msg = "Failed to save links ";
-            logger.error(msg + title, e);
+            log.error(msg + title, e);
             return RestResponse.fail(msg);
         }
         return RestResponse.ok();
@@ -63,7 +61,7 @@ public class LinksController extends BaseController {
             metaService.deleteById(id);
         } catch (Exception e) {
             String msg = "Failed to delete links ";
-            logger.error(msg + id, e);
+            log.error(msg + id, e);
             return RestResponse.fail(msg);
         }
         return RestResponse.ok();

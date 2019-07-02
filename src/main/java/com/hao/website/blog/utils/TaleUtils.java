@@ -2,19 +2,9 @@ package com.hao.website.blog.utils;
 
 import com.hao.website.blog.constant.WebConstant;
 import com.hao.website.blog.entity.User;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.Base64;
-import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -27,23 +17,20 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class TaleUtils {
 
     private static final Random random = new Random();
-
-    private static final Logger logger = LoggerFactory.getLogger(TaleUtils.class);
 
     private static final int one_month = 30 * 24 * 60 * 60;
 
@@ -69,7 +56,7 @@ public class TaleUtils {
                     String userId = deAes(cookie.getValue(), WebConstant.AES_SALT);
                     return StringUtils.isNotBlank(userId) && isNumber(userId) ? Integer.valueOf(userId) : null;
                 } catch (Exception e) {
-                    logger.info("Fail to decode user cookie");
+                    log.info("Fail to decode user cookie");
                 }
             }
         }
@@ -145,7 +132,7 @@ public class TaleUtils {
         try {
             response.sendRedirect(ViewUtil.siteUrl());
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -157,7 +144,7 @@ public class TaleUtils {
         try {
             messageDigest = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            logger.info("No MD5 MessageDigest");
+            log.info("No MD5 MessageDigest");
         }
         byte[] encode = messageDigest.digest(source.getBytes());
         // byte array to hex string
@@ -181,7 +168,7 @@ public class TaleUtils {
             cookie.setSecure(false);
             response.addCookie(cookie);
         } catch (Exception e) {
-            logger.info("Fail to store user to cookie", e.getMessage());
+            log.info("Fail to store user to cookie", e.getMessage());
         }
     }
 

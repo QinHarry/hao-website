@@ -4,8 +4,7 @@ import com.hao.website.blog.dao.AttachJPA;
 import com.hao.website.blog.entity.Attach;
 import com.hao.website.blog.entity.User;
 import com.hao.website.blog.service.IAttachService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,10 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AttachServiceImpl implements IAttachService {
-
-    private static final Logger logger = LoggerFactory.getLogger(AttachServiceImpl.class);
 
     @Autowired
     private AttachJPA attachJPA;

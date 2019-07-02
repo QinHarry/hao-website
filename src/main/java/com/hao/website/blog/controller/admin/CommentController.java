@@ -6,8 +6,7 @@ import com.hao.website.blog.dto.RestResponse;
 import com.hao.website.blog.entity.Comment;
 import com.hao.website.blog.entity.User;
 import com.hao.website.blog.service.ICommentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -19,11 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/comments")
 public class CommentController extends BaseController {
-
-    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
     @Autowired
     private ICommentService commentService;

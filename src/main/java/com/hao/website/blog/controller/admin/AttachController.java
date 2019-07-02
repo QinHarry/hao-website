@@ -11,8 +11,7 @@ import com.hao.website.blog.service.IAttachService;
 import com.hao.website.blog.service.ILogService;
 import com.hao.website.blog.utils.TaleUtils;
 import com.hao.website.blog.utils.ViewUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -32,11 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/attach")
 public class AttachController extends BaseController {
-
-    private static final Logger logger = LoggerFactory.getLogger(AttachController.class);
 
     public static final String CLASSPATH = TaleUtils.getUploadFilePath();
 
@@ -76,7 +74,7 @@ public class AttachController extends BaseController {
                         FileCopyUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));
                         attachService.save(fileName, fileKey, fileType, user);
                     } catch (IOException e) {
-                        logger.error("fail to copy file: " + e.getMessage());
+                        log.error("fail to copy file: " + e.getMessage());
                         errorFiles.add(fileName);
                     }
                 } else {
@@ -103,7 +101,7 @@ public class AttachController extends BaseController {
                     attach.get().getFileKey(), request.getRemoteAddr(), this.getUid(request));
         } catch (Exception e) {
             String msg = "Fail to delete the file";
-            logger.error(msg);
+            log.error(msg);
             return RestResponse.fail(msg);
         }
         return RestResponse.ok();

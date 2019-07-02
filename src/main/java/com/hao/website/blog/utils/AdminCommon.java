@@ -1,9 +1,11 @@
 package com.hao.website.blog.utils;
 
 import com.hao.website.blog.entity.Meta;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.apache.commons.lang3.StringUtils;
 
+@Slf4j
 @Component
 public class AdminCommon {
 

@@ -11,8 +11,7 @@ import com.hao.website.blog.entity.User;
 import com.hao.website.blog.service.IContentService;
 import com.hao.website.blog.service.ILogService;
 import com.hao.website.blog.service.IMetaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -29,11 +28,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/page")
 public class PageController extends BaseController {
-
-    private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 
     @Autowired
     private IContentService contentService;

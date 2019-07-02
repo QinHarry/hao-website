@@ -5,12 +5,14 @@ import com.hao.website.blog.entity.User;
 import com.hao.website.blog.exception.TipException;
 import com.hao.website.blog.service.IUserService;
 import com.hao.website.blog.utils.TaleUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements IUserService {
 

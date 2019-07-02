@@ -6,6 +6,7 @@ import com.hao.website.blog.entity.Comment;
 import com.hao.website.blog.entity.Content;
 import com.hao.website.blog.entity.User;
 import com.hao.website.blog.service.ICommentService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CommentServiceImpl implements ICommentService {
 

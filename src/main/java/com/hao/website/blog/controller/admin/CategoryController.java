@@ -6,8 +6,7 @@ import com.hao.website.blog.dto.RestResponse;
 import com.hao.website.blog.dto.Types;
 import com.hao.website.blog.entity.Meta;
 import com.hao.website.blog.service.IMetaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -22,11 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/category")
 public class CategoryController extends BaseController {
-
-    private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
 
     @Autowired
     private IMetaService metaService;
@@ -48,7 +46,7 @@ public class CategoryController extends BaseController {
             metaService.saveMeta(Types.CATEGORY.getType(), cname, id);
         } catch (Exception e) {
             String msg = "Fail to save category";
-            logger.error(msg, e);
+            log.error(msg, e);
             return RestResponse.fail(msg);
         }
         return RestResponse.ok();
@@ -61,7 +59,7 @@ public class CategoryController extends BaseController {
             metaService.deleteById(id);
         } catch (Exception e) {
             String msg = "Fail to delete " + id;
-            logger.error(msg, e);
+            log.error(msg, e);
             return RestResponse.fail(msg);
         }
         return RestResponse.ok();

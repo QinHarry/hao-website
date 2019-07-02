@@ -15,9 +15,8 @@ import com.hao.website.blog.service.ISiteService;
 import com.hao.website.blog.service.IUserService;
 import com.hao.website.blog.utils.GsonUtils;
 import com.hao.website.blog.utils.TaleUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +30,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Slf4j
 @Controller("adminIndexController")
 @RequestMapping("/admin")
 @Transactional(rollbackFor = TipException.class)
 public class IndexController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     @Autowired
     private ILogService logService;
@@ -118,7 +117,7 @@ public class IndexController extends BaseController {
             if (e instanceof TipException) {
                 msg = e.getMessage();
             } else {
-                logger.error(msg, e);
+                log.error(msg, e);
             }
             return RestResponse.fail(msg);
         }

@@ -16,6 +16,7 @@ import com.hao.website.blog.service.ISiteService;
 import com.hao.website.blog.utils.DateKit;
 import com.hao.website.blog.utils.TaleUtils;
 import com.hao.website.blog.utils.ZipUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,10 +45,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class SiteServiceImpl implements ISiteService {
-
-    private static final Logger logger = LoggerFactory.getLogger(SiteServiceImpl.class);
 
     @Autowired
     private CommentJPA commentJPA;
@@ -159,11 +159,11 @@ public class SiteServiceImpl implements ISiteService {
                 res = true;
             }
         } catch (FileNotFoundException e) {
-            logger.info("backup file not found ", e);
+            log.info("backup file not found ", e);
         } catch (InterruptedException ee) {
-            logger.info("backup interrupted ", ee);
+            log.info("backup interrupted ", ee);
         } catch (IOException eee) {
-            logger.info("Failed to write ", eee);
+            log.info("Failed to write ", eee);
         } finally {
             try {
                 if (bufferedReader != null) {
@@ -173,7 +173,7 @@ public class SiteServiceImpl implements ISiteService {
                     printWriter.close();
                 }
             } catch (IOException e) {
-                logger.info("Failed to close backup", e);
+                log.info("Failed to close backup", e);
             }
         }
         return res;

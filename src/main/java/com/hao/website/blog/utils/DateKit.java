@@ -1,7 +1,6 @@
 package com.hao.website.blog.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -9,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 public class DateKit {
-
-    static Logger logger = LoggerFactory.getLogger(DateKit.class);
 
     public static final int INTERVAL_DAY = 1;
     public static final int INTERVAL_WEEK = 2;
@@ -61,7 +59,7 @@ public class DateKit {
             try {
                 return format.parse(date);
             } catch (Exception e) {
-                logger.info("Fail to format date");
+                log.info("Fail to format date");
             }
         }
         return null;

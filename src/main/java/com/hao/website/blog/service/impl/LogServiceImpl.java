@@ -6,8 +6,7 @@ import com.hao.website.blog.dao.UserJPA;
 import com.hao.website.blog.entity.Log;
 import com.hao.website.blog.entity.User;
 import com.hao.website.blog.service.ILogService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,10 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class LogServiceImpl implements ILogService {
-
-    private static final Logger logger = LoggerFactory.getLogger(LogServiceImpl.class);
 
     @Autowired
     private LogJPA logJPA;

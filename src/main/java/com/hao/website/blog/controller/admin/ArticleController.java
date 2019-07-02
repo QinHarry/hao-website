@@ -12,9 +12,8 @@ import com.hao.website.blog.exception.TipException;
 import com.hao.website.blog.service.IContentService;
 import com.hao.website.blog.service.ILogService;
 import com.hao.website.blog.service.IMetaService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -32,12 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/article")
 @Transactional(rollbackFor = TipException.class)
 public class ArticleController extends BaseController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
     private IContentService contentService;
