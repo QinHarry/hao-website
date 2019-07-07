@@ -12,3 +12,7 @@ spring:
     hibernate:
       naming_strategy: org.hibernate.cfg.ImprovedNamingStrategy
       use-new-id-generator-mappings: false
+
+logging:
+  config: classpath:logback-spring.xml
+
